@@ -1,0 +1,4 @@
+*.pyc
+./store
+*.swp
+*.zip
