@@ -186,6 +186,8 @@ with tf.Graph().as_default(), tf.Session(config=tf_config) as sess:
     build_model = modelprep.build_model
     restore_model = modelprep.restore_model
 
+    # Get the output from different input, this is a class which define different properties derived from logits
+    # To use your own model, you can get your own logits from content and pass it to class build_logits in utils.py
     adv_output = build_model(adv_img, label, reuse=False)
     nat_output = build_model(img, label, reuse=True)
     dec_output = build_model(dec_img, label, reuse=True)

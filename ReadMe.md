@@ -3,9 +3,9 @@
 
 ## Table of contents
 * [Description](#description)
-* [Adversarial Samples](#Adversarial Samples)
+* [Adversarial Samples](#Adversarial-Samples)
 * [Prerequisites](#Prerequisites)
-* [Pretrained Model](#Pretrained Model)
+* [Pretrained Model](#Pretrained-Model)
 * [Features](#features)
 * [Environment](#Environment)
 * [Contact](#contact)
@@ -36,24 +36,26 @@ The first row is the benign image and the second row is the our adversarial samp
 
 - [Pretrained Decoder for ImageNet](https://qiulingxu-public.s3.us-east-2.amazonaws.com/FSA/Imagenet_Decoder.zip)
 - [Pretrained Decoder for CIFAR10](https://qiulingxu-public.s3.us-east-2.amazonaws.com/FSA/CIFAR10_Decoder.zip) 
-- [Default Classifiers for Attack]()
+- [Default Classifiers for Attack](https://qiulingxu-public.s3.us-east-2.amazonaws.com/FSA/Classifiers.zip)
 
- Download and extract it in the root directories or you can instead use your models.
+ Download and extract them in the root directories or you can instead use your models.
 
 ## Tutorial
 
-Two files are needed for performing the attack. If you already downloaded the pretrained decoder. You can skip the step 1.
+Two files are needed for performing the attack. If you already downloaded the pre-trained decoder. You can skip the step 1.
 
 ### Step 1: 
 
-Run <command> python train.py --dataset="dataset" --decoder=depth of decoder</command> . A deeper decoder injects more harmful perturbation but is less nature. The command looks like the follows: 
+Run`python train.py --dataset="[dataset]" --decoder=[depth of decoder]`. 
+
+A deeper decoder injects more harmful perturbation but is less nature-looking. The command looks like the follows: 
 
 - `python train.py --dataset="imagenet" --decoder=3` 
 - `python train.py --dataset="cifar10" --decoder=3 --scale`
 
 ### Step 2:
 
- Run  python attack.py --dataset="[dataset]" --decoder=[depth of decoder] --model="[name of classifier]" e.g.  
+ Run  `python attack.py --dataset="[dataset]" --decoder=[depth of decoder] --model="[name of classifier]"` e.g.  
 
 - `python attack.py --dataset="imagenet" --decoder=3 --model="imagenet_denoise"` 
 - `python attack.py --dataset="cifar10" --decoder=3 --scale --model="cifar10_adv"`
@@ -63,7 +65,7 @@ Note that for CIFAR10 dataset, you need to choose whether to scale up the image 
 The generated image can be found at "store" subdirectories.
 
 ## Features
-I reorganize the code for better interpretability. Some of the function is not polished and not public yet.
+I reorganize the code for better structure. Let me know if you run into errors. Some of the function is not polished and not public yet.
 
 * Implemented two phase algorithm
 * Support for Feature Argumentation Attack
@@ -74,7 +76,7 @@ To-do list:
 
 ## Environment
 
-- The code is tested on Python 3.6 + Tensorflow 1.15 + Ubuntu 18.04
+- The code is tested on Python 3.6 + Tensorflow 1.15 + Tensorpack + Ubuntu 18.04
 - To setup the environment, please download the code and model here.
 
 ## Contact
