@@ -71,9 +71,9 @@ The generated image can be found at "store" subdirectories.
 
 ### Accuracy under Attack
 
-|                                                              |                                                              |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
-| ![](/home/jerry/OneDrive/CodeManage/pub_style_attack/samples/attack1.jpg) | ![](/home/jerry/OneDrive/CodeManage/pub_style_attack/samples/attack2.jpg) |
+|                            |                            |
+| -------------------------- | -------------------------- |
+| ![](./samples/attack1.jpg) | ![](./samples/attack2.jpg) |
 
 *The result shows that defense on pixel-space can hardly ensure robustness on feature space. We set decoder=1 for the smaller dataset in the first table, and set decoder=3 for Imagenet. We set the bound=1.5 for untargeted attack and 2 for targeted attack.*
 
@@ -85,11 +85,9 @@ The generated image can be found at "store" subdirectories.
 
 ### Adversarial Training
 
-```html
-<img src="./samples/adv_training.jpg" alt="drawing" width="400"/>
-```
+![](./samples/adv_training.jpg)
 
-*The result shows that adversarial training against feature space or pixel-space is useful to corresponding attacks, but not each  other.*
+*The result shows that adversarial training on feature space or pixel-space is useful to related attacks, but not each other. Thus people need to consider both cases for well-round defenses.*
 
 ### Different Attacks
 
