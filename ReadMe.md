@@ -86,10 +86,16 @@ Created by [@Qiuling Xu](https://www.cs.purdue.edu/homes/xu1230/) - feel free to
 ## Citation
 
 >@misc{xu2020feature,
+>
 >title={Towards Feature Space Adversarial Attack}, 
+>
 >author={Qiuling Xu and Guanhong Tao and Siyuan Cheng and Lin Tan and Xiangyu Zhang},
+>
 >year={2020},
+>
 >eprint={2004.12385},
+>
 >archivePrefix={arXiv},
+>
 >primaryClass={cs.LG}
 >}

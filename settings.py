@@ -6,7 +6,7 @@ import os
 def init_settings(config_name,suffix="",task_dir=""):
     global config
     config={}
-    assert config_name in ["cifar10", "cifar10_shallo", "cifar10_shallowest", "cifar10_unscale", "imagenet",
+    assert config_name in ["cifar10", "cifar10_shallow", "cifar10_shallowest", "cifar10_unscale", "imagenet",
                         "imagenet_shallow", "imagenet_shallowest"]
     if config_name.find("cifar10")>=0:
         data_set = "cifar10"
@@ -170,7 +170,7 @@ def common_const_init(data_set, model_name, decoder_name, task_name):
 
     if data_set == "cifar10":
         assert model_name in ["cifar10_nat", "cifar10_adv", "cifar10_trades"]
-        assert decoder_name in ["cifar10", "cifar10_balance"]
+        assert decoder_name in ["cifar10", "cifar10_shallow", "cifar10_shallowest", "cifar10_unscale"]
         init_settings(decoder_name, task_dir=task_dir)
 
         Decoder_Model = "./cifar10transform1.ckpt"
