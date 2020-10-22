@@ -55,7 +55,6 @@ elif data_set == "cifar10":
         decoder_name = decoder_list[decoder]
     else:
         decoder_name = "cifar10_unscale"
-    decoder_name = "cifar10"
 
 task_name = "attack"
 

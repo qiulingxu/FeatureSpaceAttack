@@ -46,7 +46,7 @@ elif data_set == "cifar10":
     else:
         decoder_name = "cifar10_unscale"
     model_name = "cifar10_nat"
-    decoder_name = "cifar10"
+    
 task_name = "train"
 
 # Put all the pre-defined const into settings and fetch them as global variables
