@@ -9,6 +9,7 @@
 * [Features](#features)
 * [Environment](#Environment)
 * [Contact](#contact)
+* [Citation](#Citation)
 
 ## Description
 This project provides a general way to construct adversarial attack in feature space! Different from common works on pixel-space, in this project, we aimed to find a suitable feature space for adversarial attack.  With this spirit, we leverage style transfer and propose a two-phase feature-space attack. The first phase (a) is to ensure that feature-space perturbation can be restored back into pixel-space. The second phase (b) is to find such adversarial perturbation within a proper bound. 
@@ -81,3 +82,14 @@ To-do list:
 
 ## Contact
 Created by [@Qiuling Xu](https://www.cs.purdue.edu/homes/xu1230/) - feel free to contact me!
+
+## Citation
+
+>@misc{xu2020feature,
+>title={Towards Feature Space Adversarial Attack}, 
+>author={Qiuling Xu and Guanhong Tao and Siyuan Cheng and Lin Tan and Xiangyu Zhang},
+>year={2020},
+>eprint={2004.12385},
+>archivePrefix={arXiv},
+>primaryClass={cs.LG}
+>}
