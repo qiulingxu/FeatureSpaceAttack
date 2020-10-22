@@ -6,6 +6,8 @@
 * [Adversarial Samples](#Adversarial-Samples)
 * [Prerequisites](#Prerequisites)
 * [Pretrained Model](#Pretrained-Model)
+* [Tutorial](#Tutorial)
+* [Result](#Result)
 * [Features](#features)
 * [Environment](#Environment)
 * [Contact](#contact)
@@ -33,7 +35,7 @@ The first row is the benign image and the second row is the our adversarial samp
 
 [VGG19]( https://qiulingxu-public.s3.us-east-2.amazonaws.com/FSA/vgg19_normalised.zip) : Extract it in the root
 
-## Pretrained Model
+## Pre-trained Model
 
 - [Pretrained Decoder for ImageNet](https://qiulingxu-public.s3.us-east-2.amazonaws.com/FSA/Imagenet_Decoder.zip)
 - [Pretrained Decoder for CIFAR10](https://qiulingxu-public.s3.us-east-2.amazonaws.com/FSA/CIFAR10_Decoder.zip) 
@@ -65,7 +67,36 @@ Note that for CIFAR10 dataset, you need to choose whether to scale up the image 
 
 The generated image can be found at "store" subdirectories.
 
+## Result
+
+### Accuracy under Attack
+
+|                                                              |                                                              |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| ![](/home/jerry/OneDrive/CodeManage/pub_style_attack/samples/attack1.jpg) | ![](/home/jerry/OneDrive/CodeManage/pub_style_attack/samples/attack2.jpg) |
+
+*The result shows that defense on pixel-space can hardly ensure robustness on feature space. We set decoder=1 for the smaller dataset in the first table, and set decoder=3 for Imagenet. We set the bound=1.5 for untargeted attack and 2 for targeted attack.*
+
+### Human Preference Rate
+
+![Human_Preference](./samples/human_preference.png)
+
+*We employ targeted attack on Imagenet Resnet50 v1 Model. We report the successful rate and corresponding human preference rate under different bound. We choose Imagenet and decoder=1 for this experiment.*
+
+### Adversarial Training
+
+```html
+<img src="./samples/adv_training.jpg" alt="drawing" width="400"/>
+```
+
+*The result shows that adversarial training against feature space or pixel-space is useful to corresponding attacks, but not each  other.*
+
+### Different Attacks
+
+![](./samples/samples_diff_attack.jpg)
+
 ## Features
+
 I reorganize the code for better structure. Let me know if you run into errors. Some of the function is not polished and not public yet.
 
 * Implemented two phase algorithm
@@ -78,6 +109,7 @@ To-do list:
 ## Environment
 
 - The code is tested on Python 3.6 + Tensorflow 1.15 + Tensorpack + Ubuntu 18.04
+- We test the program on GTX 2080TI.  If you have a card with small memory, please consider decrease the "BATCH_SIZE" in "settings.py" .
 - To setup the environment, please download the code and model here.
 
 ## Contact
