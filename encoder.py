@@ -69,7 +69,10 @@ class Encoder(object):
         assert mode == "RGB"
         # preprocess
         if settings.config["IMAGE_SHAPE"][0] != 224 and "NO_SCALE" not in settings.config:
-            image = tf.image.resize(image, size=[224, 224])
+            if "pre_scale" in image.__dict__:
+                image = image.pre_scale
+            else:
+                image = tf.image.resize(image, size=[224, 224])
         
         # To BGR
         image = tf.reverse(image, axis=[-1])
@@ -83,9 +86,11 @@ class Encoder(object):
         image = tf.reverse(image, axis=[-1])
         image = tf.clip_by_value(image, 0.0, 255.0)
         
+        pre_scale = image
         if settings.config["IMAGE_SHAPE"][0] != 224 and "NO_SCALE" not in settings.config:
             image = tf.image.resize(
                 image, size=settings.config["IMAGE_SHAPE"][:2])
+        image.pre_scale = pre_scale
         return image
 
 def conv2d(x, kernel, bias):

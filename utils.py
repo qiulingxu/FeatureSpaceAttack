@@ -55,7 +55,6 @@ def average_gradients(tower_grads):
     return average_grads
 
 
-confidence = 50
 l2_weight = 1e-5
 
 def top_k_acc(logits,labels,k):
@@ -76,11 +75,11 @@ class build_logits:
         self.acc_y = tf.cast(tf.equal(self.prediction, label), tf.float32)
         self.acc = tf.reduce_mean(self.acc_y)
         self.logits = logits
-        self.label_logit = tf.reduce_sum(self.onehot_label*logits)
+        self.label_logit = tf.reduce_sum(self.onehot_label*logits, axis=-1)
         self.wrong_logit = tf.reduce_max(
-            (1-self.onehot_label)*logits - self.onehot_label*1e9)
-        self.target_loss = tf.nn.relu(
-            self.label_logit-self.wrong_logit+confidence)
+            (1-self.onehot_label)*logits - self.onehot_label*1e9, axis=-1)
+        self.target_loss = - tf.nn.relu(
+            self.label_logit-self.wrong_logit+conf)
         self.xent = tf.nn.sparse_softmax_cross_entropy_with_logits(
             labels=label, logits=logits)
         self.xent_sum = tf.reduce_sum(self.xent)
@@ -99,9 +98,11 @@ class build_logits:
             tf.reduce_sum(tf.nn.relu(self.true_logit5 - self.wrong_logit5 + conf), axis=1)
         if classes>50:
             self.accuracy = self.acc_5
+            self.acc_y_auto = self.acc_y_5 
             self.target_loss_auto = self.target_loss5
         else:
             self.accuracy = self.acc
+            self.acc_y_auto = self.acc_y
             self.target_loss_auto = self.target_loss
 
 def normalize(content,  epsilon=1e-5):

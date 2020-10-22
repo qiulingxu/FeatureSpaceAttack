@@ -76,7 +76,7 @@ def init_settings(config_name,suffix="",task_dir=""):
         config["hardened_model"] = "hardened.ckpt"
         config["model_save_path"] = "./cifar10transform%d.ckpt" % (config["style_weight"])
 
-    if config_name == "cifar10_shallowest":
+    elif config_name == "cifar10_shallowest":
         config["CLASS_NUM"] = 10
         config["IMAGE_SHAPE"] = [32, 32, 3]
         config["DECODER_DIM"] = [112, 112, 128]
@@ -173,9 +173,14 @@ def common_const_init(data_set, model_name, decoder_name, task_name):
         assert decoder_name in ["cifar10", "cifar10_shallow", "cifar10_shallowest", "cifar10_unscale"]
         init_settings(decoder_name, task_dir=task_dir)
 
-        Decoder_Model = "./cifar10transform1.ckpt"
-
-        
+        if decoder_name == "cifar10_unscale":
+            Decoder_Model = "./cifar10transform1.ckpt"
+        elif decoder_name == "cifar10":
+            Decoder_Model = "./cifar10transform_scale1.ckpt"
+        elif decoder_name == "cifar10_shallow":
+            Decoder_Model = "./cifar10shallowtransform_scale1.ckpt"
+        elif decoder_name == "cifar10_shallowest":
+            Decoder_Model = "./cifar10shallowesttransform_scale1.ckpt"
 
     elif data_set == "imagenet":
         assert model_name in ["imagenet_denoise", "imagenet_normal"]

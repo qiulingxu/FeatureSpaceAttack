@@ -75,15 +75,15 @@ TRAINING_IMAGE_SHAPE = settings.config["IMAGE_SHAPE"]
 EPOCHS = 4
 EPSILON = 1e-5
 BATCH_SIZE = settings.config["BATCH_SIZE"]
-if data_set=="cifar10":
+if data_set == "cifar10":
     LEARNING_RATE = 1e-2
     LR_DECAY_RATE = 1e-4
     DECAY_STEPS = 1.0
-    adv_weight = 5000
-    ITER=500
+    adv_weight = 500
+    ITER=2000
     CLIP_NORM_VALUE = 10.0
 else:
-    if model_name == "imagenet_shallowest":
+    if model_name .find("shallowest")>=0:
         LEARNING_RATE = 5e-3
     else:
         LEARNING_RATE = 1e-2
@@ -106,7 +106,7 @@ def grad_attack():
     sess.run(stn.init_style, feed_dict=fdict)
     sess.run(global_step.initializer)
     rst_img, rst_loss, nat_acc, rst_acc,rst_mean,rst_sigma = sess.run(
-        [adv_img, content_loss_y, nat_output.acc_y_5, adv_output.acc_y_5, stn.meanS, stn.sigmaS],  feed_dict=fdict)
+        [adv_img, content_loss_y, nat_output.acc_y_auto, adv_output.acc_y_auto, stn.meanS, stn.sigmaS],  feed_dict=fdict)
     print("Nature Acc:", nat_acc)
     for i in range(ITER):
         # Run an optimization step
@@ -117,7 +117,7 @@ def grad_attack():
         
         # Monitor the progress
         _adv_img, acc, aloss, closs, _mean, _sigma = sess.run(
-            [adv_img, adv_output.acc_y_5, adv_loss, content_loss_y, stn.meanS, stn.sigmaS],  feed_dict=fdict)
+            [adv_img, adv_output.acc_y_auto, adv_loss, content_loss_y, stn.meanS, stn.sigmaS],  feed_dict=fdict)
         for j in range(BATCH_SIZE):
             # Save the best samples
             if acc[j]<rst_acc[j] or (acc[j]==rst_acc[j] and closs[j]<rst_loss[j]): 
@@ -179,7 +179,7 @@ with tf.Graph().as_default(), tf.Session(config=tf_config) as sess:
     target_features = stn.target_features
 
     # pass the generated_img to the encoder, and use the output compute loss
-    enc_gen_adv, enc_gen_layers_adv = stn.encoder.encode(adv_img)
+    enc_gen_adv, enc_gen_layers_adv = stn.encode(adv_img)
     
     modelprep.init_classifier()
     build_model = modelprep.build_model
@@ -194,7 +194,7 @@ with tf.Graph().as_default(), tf.Session(config=tf_config) as sess:
     # We are minimizing the loss. Take the negative of the loss
     # Use CW loss top5 for imagenet and CW top1 for cifar10. 
     # Here the target_loss represents CW loss, it is not the loss for targeted attack.
-    adv_loss = - adv_output.target_loss_auto
+    adv_loss = -adv_output.target_loss_auto
 
     # compute the content loss
     content_loss_y = tf.reduce_sum(
