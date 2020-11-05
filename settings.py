@@ -124,11 +124,11 @@ def init_settings(config_name,suffix="",task_dir=""):
         config["DECODER_DIM"] = [56, 56, 256]
         config["IMAGE_SHAPE"] = [224, 224, 3]
 
-
         config["pretrained_model"] = "imagenet_pretrained.ckpt"
         config["hardened_model"] = "imagenet_hardened.ckpt"
         config["model_save_path"] = "./imagenetshallowtransform%d.ckpt" % (
             config["style_weight"])
+        config["Decoder_Layer"] = "deconv"
 
     elif config_name == "imagenet_shallowest":
         config["CLASS_NUM"] = 1000
@@ -140,6 +140,7 @@ def init_settings(config_name,suffix="",task_dir=""):
         config["hardened_model"] = "imagenet_hardened.ckpt"
         config["model_save_path"] = "./imagenetshallowesttransform%d.ckpt" % (
             config["style_weight"])
+        config["Decoder_Layer"] = "deconv"
 
     global logger
 

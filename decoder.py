@@ -9,6 +9,11 @@ class Decoder(object):
 
     def __init__(self):
         self.weight_vars = []
+        
+        if "Decoder_Layer" in settings.config:
+            self.decoder_layer = settings.config["Decoder_Layer"]
+        else:
+            self.decoder_layer = "conv"
 
         with tf.variable_scope('decoder'):
             self._create_variables(512, 256, 3, scope='conv4_1')
@@ -25,29 +30,49 @@ class Decoder(object):
             self._create_variables( 64,   3, 3, scope='conv1_1')
 
     def _create_variables(self, input_filters, output_filters, kernel_size, scope):
+        if self.decoder_layer == "conv":
+            self._create_variables_c(
+                input_filters, output_filters, kernel_size, scope)
+        elif self.decoder_layer == "deconv":
+            self._create_variables_t(
+                input_filters, output_filters, kernel_size, scope)
+        else:
+            assert False
+
+    def _create_variables_c(self, input_filters, output_filters, kernel_size, scope):
         if scope in settings.config["DECODER_LAYERS"]:
 
             with tf.variable_scope(scope):
-                shape  = [kernel_size, kernel_size, input_filters, output_filters]
-                kernel = tf.get_variable(initializer=tf.contrib.layers.xavier_initializer(uniform=False), shape=shape, name='kernel')
-                bias = tf.get_variable(initializer=tf.contrib.layers.xavier_initializer(uniform=False), shape=[output_filters], name='bias')
+                shape = [kernel_size, kernel_size,
+                         input_filters, output_filters]
+                kernel = tf.get_variable(initializer=tf.contrib.layers.xavier_initializer(
+                    uniform=False), shape=shape, name='kernel')
+                bias = tf.get_variable(initializer=tf.contrib.layers.xavier_initializer(
+                    uniform=False), shape=[output_filters], name='bias')
                 pack = (kernel, bias)
             self.weight_vars.append(pack)
 
     def _create_variables_t(self, input_filters, output_filters, kernel_size, scope):
-        assert False
-        with tf.variable_scope(scope):
-            shape = [kernel_size, kernel_size, input_filters, output_filters]
-            kernel = tf.get_variable(initializer=tf.contrib.layers.xavier_initializer(
-                uniform=False), shape=shape, name='kernel')
-            bias = tf.get_variable(initializer=tf.contrib.layers.xavier_initializer(
-                uniform=False), shape=[input_filters], name='bias')
-            return (kernel, bias)
+        if scope in settings.config["DECODER_LAYERS"]:
+            with tf.variable_scope(scope):
+                shape = [kernel_size, kernel_size,
+                         output_filters, input_filters]
+                kernel = tf.get_variable(initializer=tf.contrib.layers.xavier_initializer(
+                    uniform=False), shape=shape, name='kernel')
+                bias = tf.get_variable(initializer=tf.contrib.layers.xavier_initializer(
+                    uniform=False), shape=[output_filters], name='bias')
+            pack = (kernel, bias)
+            self.weight_vars.append(pack)
 
     def decode(self, image):
         # upsampling after 'conv4_1', 'conv3_1', 'conv2_1'
         upsample_indices = settings.config["upsample_indices"]
         final_layer_idx  = len(self.weight_vars) - 1
+
+        if self.decoder_layer == "conv":
+            func = conv2d
+        else:
+            func = transconv2d
 
         out = image
         for i in range(len(self.weight_vars)):
@@ -57,9 +82,9 @@ class Decoder(object):
             #    out=transconv2d(out,kernel,bias)
             #else:
             if i == final_layer_idx:
-                out = conv2d(out, kernel, bias, use_relu=False)
+                out = func(out, kernel, bias, use_relu=False)
             else:
-                out = conv2d(out, kernel, bias)
+                out = func(out, kernel, bias)
             
             if i in upsample_indices:
                 out = upsample(out)
@@ -82,16 +107,15 @@ def conv2d(x, kernel, bias, use_relu=True):
     return out
 
 
-def transconv2d(x, kernel, bias, use_relu=True):
+def transconv2d(x, kernel, bias, use_relu=True, stride=1):
 
-
-    bs=tf.shape(x)[0]
-    img_sz=x.shape.as_list()[1]
+    bs = tf.shape(x)[0]
+    img_sz = x.shape.as_list()[1]
     #print(img_sz)
-    filter_size=kernel.shape.as_list()[2]
+    filter_size = kernel.shape.as_list()[2]
     # conv and add bias
     g_deconv = tf.nn.conv2d_transpose(x, kernel, output_shape=[
-        bs, img_sz*2, img_sz*2, filter_size], strides=[1, 2, 2, 1], padding='SAME')
+        bs, img_sz*stride, img_sz*stride, filter_size], strides=[1, stride, stride, 1], padding='SAME')
     out = g_deconv + bias
 
     if use_relu:
