@@ -27,6 +27,7 @@ def init_settings(config_name,suffix="",task_dir=""):
 
     if config_name.find("_shallowest")>=0:
         config["BATCH_SIZE"] = 8
+        
         config["ENCODER_LAYERS"] = (
             'conv1_1', 'relu1_1', 'conv1_2', 'relu1_2', 'pool1',
             'conv2_1', 'relu2_1')
@@ -114,7 +115,7 @@ def init_settings(config_name,suffix="",task_dir=""):
 
         config["pretrained_model"] = "imagenet_pretrained.ckpt"
         config["hardened_model"] = "imagenet_hardened.ckpt"
-        config["model_save_path"] = "./imagenettransform%d.ckpt" % (
+        config["model_save_path"] = "./imagenettransform%d.ckpt.mode2" % (
             config["style_weight"])
 
 
@@ -126,7 +127,7 @@ def init_settings(config_name,suffix="",task_dir=""):
 
         config["pretrained_model"] = "imagenet_pretrained.ckpt"
         config["hardened_model"] = "imagenet_hardened.ckpt"
-        config["model_save_path"] = "./imagenetshallowtransform%d.ckpt" % (
+        config["model_save_path"] = "./imagenetshallowtransform%d.ckpt.mode2" % (
             config["style_weight"])
         config["Decoder_Layer"] = "deconv"
 
@@ -138,7 +139,7 @@ def init_settings(config_name,suffix="",task_dir=""):
 
         config["pretrained_model"] = "imagenet_pretrained.ckpt"
         config["hardened_model"] = "imagenet_hardened.ckpt"
-        config["model_save_path"] = "./imagenetshallowesttransform%d.ckpt" % (
+        config["model_save_path"] = "./imagenetshallowesttransform%d.ckpt.mode2" % (
             config["style_weight"])
         config["Decoder_Layer"] = "deconv"
 

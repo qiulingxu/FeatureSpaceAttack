@@ -200,9 +200,9 @@ with tf.Graph().as_default(), tf.Session(config=tf_config) as sess:
         if batch % 100 == 0:
 
             elapsed_time = datetime.now() - start_time
-            _content_loss, _adv_acc, _adv_loss, _loss, _l2_embed = sess.run([content_loss, adv_output.acc, adv_output.target_loss, loss, l2_embed],
+            _content_loss, _adv_acc, _adv_loss, _loss, _l2_embed = sess.run([content_loss, adv_output.acc, adv_output.xent_sum, loss, l2_embed],
                                                                   feed_dict=fdict)
-            _normal_loss, _normal_acc = sess.run([nat_output.target_loss, nat_output.acc],
+            _normal_loss, _normal_acc = sess.run([nat_output.xent_sum, nat_output.acc],
                                                  feed_dict=fdict)
 
             logger.info('step: %d,  total loss: %.3f,  elapsed time: %s' %
